@@ -3,19 +3,19 @@ import React from "react";
 const Rating = ({rating, numReviews}) => {
     
     return (
-        <div>
+        <div className="rating">
             {
                 
                 [1,2,3,4,5].map((n, i) => {
                     return (rating % 1 !== 0) // First condition 
                     ? (i+1 <= rating) 
-                    ? <span><i className="fa fa-star"></i> </span>
+                    ? <span key={i}><i className="fa fa-star"></i> </span>
                     : ((i === Math.floor(rating))) 
-                    ? <span><i className="fa fa-star-half-o"></i> </span> 
-                    : <span><i className="fa fa-star-o"></i> </span> 
+                    ? <span key={i}><i className="fa fa-star-half-o"></i> </span> 
+                    : <span key={i}><i className="fa fa-star-o"></i> </span> 
                     : (i+1 <= rating) 
-                    ? <span><i className="fa fa-star"></i> </span> 
-                    : <span><i className="fa fa-star-o"></i> </span> // First condition
+                    ? <span key={i}><i className="fa fa-star"></i> </span> 
+                    : <span key={i}><i className="fa fa-star-o"></i> </span> // First condition
                 }) 
             }
             {
