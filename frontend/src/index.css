@@ -89,6 +89,7 @@ img.medium{
 }
 .img{
   height: 38rem;
+  
   /* border-bottom: #203040 0.1rem solid; Agregados por mí | Tal vez lo quite */
 } /* Agregados por mí */
 
@@ -114,4 +115,7 @@ img.medium{
 .rating span{
   color: #f0c040;
   margin: 0.1rem;
+}
+.rating span:last-child{
+  color: #404040;
 }
