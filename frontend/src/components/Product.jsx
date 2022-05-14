@@ -22,4 +22,6 @@ const Product = ({product}) => {
     
   </div>
 }
+
+//A coment to prove something
 export default Product;
