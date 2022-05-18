@@ -75,4 +75,4 @@ const data = {
     ],
 };
 //hello anxiety;
-module.exports = data;
+export default data;
