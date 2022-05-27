@@ -1,10 +1,17 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import data from './data.js';
+import dotenv from 'dotenv';
 import productRouter from './routers/productRouter.js';
 import userRouter from './routers/userRouter.js';
 
+dotenv.config();
 const app = express();
+
+// To read body data in a json format:
+app.use(express.json());
+// If extended is false, you can not post "nested object"
+// If extended is true, you can do whatever way that you like.
+app.use(express.urlencoded({extended: true}))
 
 // To connect mongodb with express
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona' 
