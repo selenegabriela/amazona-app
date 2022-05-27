@@ -9,7 +9,7 @@ const userRouter = express.Router();
 userRouter.get('/seed', expressAsyncHandler(async (req, res) => {
     // To remove all the created users and not having troubles with duplicated email:
 
-    await User.deleteMany();
+    //await User.deleteMany();
 
     const createdUsers = await User.insertMany(data.users);
     res.send({ createdUsers });

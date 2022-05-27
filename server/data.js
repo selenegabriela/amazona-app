@@ -17,9 +17,8 @@ const data = {
     ],
     products: [
         {
-            _id: 1,
             name: 'Programmer Hoodie',
-            cathegory: 'Hoodies',
+            category: 'Hoodies',
             image: '/images/p1.jpg',
             price: 120,
             countInStock: 1,
@@ -29,9 +28,8 @@ const data = {
             description: 'hight quality product',
         },
         {
-            _id: 2,
             name: 'Programmer shirt',
-            cathegory: 'Shirts',
+            category: 'Shirts',
             image: '/images/p2.jpg',
             price: 100,
             countInStock: 15,
@@ -41,9 +39,8 @@ const data = {
             description: 'hight quality product',
         },
         {
-            _id: 3,
             name: 'Programmer gap',
-            cathegory: 'Gaps',
+            category: 'Gaps',
             image: '/images/p3.jpg',
             price: 50,
             countInStock: 8,
@@ -53,9 +50,8 @@ const data = {
             description: 'hight quality product',
         },
         {
-            _id: 4,
             name: 'Blue jeans',
-            cathegory: 'Jeans',
+            category: 'Jeans',
             image: '/images/p4.jpg',
             price: 150,
             countInStock: 25,
@@ -65,9 +61,8 @@ const data = {
             description: 'hight quality product',
         },
         {
-            _id: 5,
             name: 'Hey Arnold hoodie',
-            cathegory: 'Hoodies',
+            category: 'Hoodies',
             image: '/images/p5.jpg',
             price: 200,
             countInStock: 2,
@@ -77,9 +72,8 @@ const data = {
             description: 'hight quality product',
         },
         {
-            _id: 6,
             name: 'Skate shoes',
-            cathegory: 'Shoes',
+            category: 'Shoes',
             image: '/images/p6.jpg',
             price: 180,
             countInStock: 0,
