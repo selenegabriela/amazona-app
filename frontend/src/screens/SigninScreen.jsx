@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
+import {Link, useNavigate, useSearchParams} from 'react-router-dom';
+import { signin } from '../actions/userActions';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 const SigninScreen = () => {
+    const dispatch = useDispatch();
     const [email, setEmail ] = useState('');
     const [password, setPassword ] = useState('');
+    const [ searchParams ] = useSearchParams();
+    const queries = [...searchParams];
+    const navigate = useNavigate();
+    // console.log(queries[0][1], queries)
+    const redirect = (queries.length && queries[0][1])|| '/';
+    // const location = useLocation();
+    
+    const userInfo = useSelector(state => state.userSignin.userInfo);
+    const loading = useSelector(state => state.userSignin.loading);
+    const error = useSelector(state => state.userSignin.error);
 
     const submitHandler = (e) => {
         e.preventDefault();
-    
+        dispatch(signin(email, password));
     }
+    useEffect(() => {
+        if(userInfo){
+            navigate(redirect);
+        }
+    }, [ navigate, redirect, userInfo ]);
 
     return (
         <div>
@@ -16,6 +36,12 @@ const SigninScreen = () => {
                 <div>
                     <h1>Sign In</h1>
                 </div>
+                {
+                    loading && <LoadingBox></LoadingBox>
+                }
+                {
+                    error && <MessageBox variant='danger'>{error}</MessageBox>
+                }
                 <div>
                     <label htmlFor="email">Email address</label>
                     <input type="email" id="email" placeholder='Enter email' required onChange={e => setEmail(e.target.value)}/>
