@@ -26,7 +26,11 @@ const SigninScreen = () => {
     }
     useEffect(() => {
         if(userInfo){
-            navigate('/'+redirect);
+            if(redirect !== '/'){
+                navigate('/'+redirect);
+            } else {
+                navigate(navigate)
+            }
         }
     }, [ navigate, redirect, userInfo ]);
 
@@ -58,7 +62,7 @@ const SigninScreen = () => {
                     <label />
                     <div>
                         New customer
-                        ? <Link to={`/register?redirect=/${redirect}`}>Create your account</Link>
+                        ? <Link to={`/register?redirect=${redirect}`}>Create your account</Link>
                     </div>
                 </div>
             </form>
