@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { saveShippingAddress } from '../actions/cartActions';
@@ -8,9 +8,6 @@ const ShippingAddressScreen = () => {
     const navigate = useNavigate();
     const shippingAddress = useSelector(state => state.cart.shippingAddress);
     const userInfo = useSelector(state => state.userSignin.userInfo);
-    if(!userInfo){
-        navigate('/signin');
-    }
     const [ fullName, setFullName] = useState(shippingAddress.fullName);
     const [ address, setAddress] = useState(shippingAddress.address);
     const [ city, setCity] = useState(shippingAddress.city);
@@ -18,11 +15,18 @@ const ShippingAddressScreen = () => {
     const [ country, setCountry] = useState(shippingAddress.country);
     const dispatch = useDispatch();
 
+
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(saveShippingAddress({fullName, address, city, postalCode, country}));
         navigate('/payment');
     }
+
+    useEffect(() => {
+        if(!userInfo){
+            navigate('/signin');
+        }
+    }, [navigate, userInfo])
     return (
         <div>
             {/* We can send booleans though props, only writting the name of the prop. If we send in int's true */}
