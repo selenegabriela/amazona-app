@@ -17,3 +17,28 @@ export const generateToken = (user) => {
 };
 
 // Now, we have to create the .env file and import the dotenv package in index:  and write: dotenv.config();
+
+export const isAuth = (req, res, next) => {
+    const authorization = req.headers.authorization;
+    if(authorization){
+        const token = authorization.slice(7, authorization.length); // Bearer XXXXX
+        // 3 arguments: token, proces.env, (err, decode)
+        //Jtw.verify return the data we send in the past middleware (Jtw.sign) inside 'decode' variable.
+        Jwt.verify(
+            token,
+            process.env.JTW_SECRET || 'somethingsecret',
+            (err, decode) => {
+                if(err) {
+                    res.status(401).send({message: 'Invalid Token'});
+                } else {
+                    // decode is the information about user
+                    req.user = decode;
+                    // With next we pass user as a property of request to the next middleware, the middleware where we call the auth function: orderRouter.js
+                    next();
+                }
+            }
+        )
+    } else {
+        res.status(401).send({message: 'No Token'});
+    }
+}
