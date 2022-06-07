@@ -1,22 +1,58 @@
-import React, { useEffect } from 'react';
+import axios from 'axios';
+import {PayPalButton} from 'react-paypal-button-v2';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { detailsOrder } from '../actions/orderActions';
+import { detailsOrder, payOrder } from '../actions/orderActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 
 
 const OrderScreen = () => {
     const { id } = useParams();
+    const [ sdkReady, setSdkReady ] = useState(false);
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
+    const orderPay = useSelector(state => state.orderDetails);
+    const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
     console.log(orderDetails)
     const dispatch = useDispatch();
-    console.log(loading)
+
+    
     useEffect(() => {
-       dispatch(detailsOrder(id)); 
-    }, [ dispatch, id ])
+        //PAYPAL FUNCTION
+        const addPaypalScript = async () => {
+            const { data } = await axios.get('/api/config/paypal');
+            const script = document.createElement('script');
+            script.type='text/javascript';
+            script.src = `https://www.paypal.com/sdk/js?client-id=${data}&currency=USD`;
+            script.async = true;
+            script.onload = () => {
+                setSdkReady(true);
+            }
+            document.body.appendChild(script);
+        }
+        if(!order || successPay || (order && order._id !== id)){
+            dispatch({type: ORDER_PAY_RESET});
+            dispatch(detailsOrder(id)); 
+        } else {
+            if(!order.isPaid){
+                console.log(window)
+                if(!window.paypal){
+                    addPaypalScript();
+                } else {
+                    setSdkReady(true);
+                }
+            }
+        }
+        //After this, we need to install a paypal package: react-paypal-button-v2
+    }, [ dispatch, id, order, successPay ])
+    const successPaymentHandler = (paymentResult) => {
+        dispatch(payOrder(order, paymentResult));
+    }
+
     return loading ? (<LoadingBox></LoadingBox>) : error ? (<MessageBox variant='danger'>{error}</MessageBox>) : (
         <div>
             <h1>Order {order._id}</h1>
@@ -108,6 +144,21 @@ const OrderScreen = () => {
                                         </div>
                                     </div>
                                 </li>
+                                {
+                                    !order.isPaid && (
+                                        <li>
+                                            {!sdkReady
+                                            ? (<LoadingBox></LoadingBox>)
+                                            : (
+                                            <>
+                                            {errorPay && (<MessageBox variant= "danger">{errorPay}</MessageBox>)}
+                                            {loadingPay && (<LoadingBox></LoadingBox>)}
+                                            <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler}></PayPalButton>
+                                            </>
+                                            )}
+                                        </li>
+                                    )
+                                }
                             </ul>
                         </div>
                 </div>
