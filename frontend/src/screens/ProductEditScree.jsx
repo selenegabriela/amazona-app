@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '../../node_modules/react-redux/es/exports';
-import { useParams } from '../../node_modules/react-router-dom/index';
-import { detailsProduct } from '../actions/productActions';
+import { useNavigate, useParams } from '../../node_modules/react-router-dom/index';
+import { detailsProduct, updateProduct } from '../actions/productActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
 
 const ProductEditScreen = () => {
-
+    const navigate = useNavigate();
     const { id } = useParams();
     const [ name, setName ] = useState('');
     const [ price, setPrice ] = useState('');
@@ -19,9 +20,14 @@ const ProductEditScreen = () => {
     const productDetails = useSelector(state => state.productDetails);
     const { loading, error, product } = productDetails;
 
+    const productUpdate = useSelector(state => state.productUpdate);
+    const {loading: loadingUpdate, success: successUpdate, error: errorUpdate} = productUpdate;
+
     const dispatch = useDispatch();
     useEffect(() => {
-        if(!product || product._id !== id){
+        if(successUpdate) navigate('/productlist');
+        if(!product || product._id !== id || successUpdate){
+            dispatch({type: PRODUCT_UPDATE_RESET});
             dispatch(detailsProduct(id));
         } else {
             setName(product.name)
@@ -32,10 +38,20 @@ const ProductEditScreen = () => {
             setBrand(product.brand)
             setDescription(product.description)
         }
-    }, [ dispatch, id, product ]);
+    }, [ dispatch, id, product, navigate, successUpdate ]);
 
     const submitHandler = (e) => {
         e.preventDefault();
+        dispatch(updateProduct({
+            _id: id,
+            name,
+            price,
+            image,
+            category,
+            brand, 
+            countInStock,
+            description
+        }))
     }
 
     return (
@@ -44,6 +60,10 @@ const ProductEditScreen = () => {
                 <div>
                     <h1>Edit product</h1>
                 </div>
+                {loadingUpdate && <LoadingBox></LoadingBox>}
+                {errorUpdate && <MessageBox variant='danger'>{error}</MessageBox>}
+
+
                 {loading? <LoadingBox></LoadingBox>
                 :
                 error? <MessageBox variant='danger'>{error}</MessageBox>
