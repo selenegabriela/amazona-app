@@ -32,7 +32,7 @@ productRouter.get('/:id', expressAsyncHandler(
 
 productRouter.post('/', isAuth, isAdmin, expressAsyncHandler(async(req, res) => {
     const product = new Product({
-        name: 'sample name',
+        name: 'sample name' + Date.now(),
         image: '/images/p1.jpg',
         price: 0,
         category: 'sample category',
