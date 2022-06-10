@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from '../../node_modules/axios/index';
 import { useDispatch, useSelector } from '../../node_modules/react-redux/es/exports';
 import { useNavigate, useParams } from '../../node_modules/react-router-dom/index';
 import { detailsProduct, updateProduct } from '../actions/productActions';
@@ -53,6 +54,27 @@ const ProductEditScreen = () => {
             description
         }))
     }
+    // Upload image handler
+    const [ loadingUpload, setLoadingUpload ] = useState(false)
+    const [ errorUpload, setErrorUpload ] = useState('');
+    const userInfo  = useSelector(state => state.userSignin.userInfo);
+    const uploadFileHandler = async (e) => {
+        
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('image', file);
+        setLoadingUpload(true);
+        try {
+            const {data} = await axios.post('/api/uploads', bodyFormData, {
+                headers: { 'Content-Type': 'multipart/form-data', authorization: `Bearer ${userInfo.token}`}
+            });
+            setImage(data);
+            setLoadingUpload(false);
+        } catch (error) {
+            setErrorUpload(error.message);
+            setLoadingUpload(false);
+        }
+    }
 
     return (
         <div>
@@ -80,6 +102,14 @@ const ProductEditScreen = () => {
                     <div>
                         <label htmlFor="image">Image</label>
                         <input id="image" type="text" placeholder='Enter image' value={image} onChange={(e) => setImage(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="imageFile">Image File</label>
+                        <input type="file" id="imageFile" label='Choose Image' onChange={uploadFileHandler} />
+                        {loadingUpload && <LoadingBox></LoadingBox>}
+                        {errorUpload && (
+                            <MessageBox variant='danger'>{errorUpload}</MessageBox>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="category">Category</label>
