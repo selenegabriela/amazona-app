@@ -1,10 +1,18 @@
 import express from 'express';
 import Order from '../models/orderModel.js';
-import { isAuth } from '../utils.js';
+import { isAdmin, isAuth } from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
 
 const orderRouter = express.Router();
 
+orderRouter.get('/', isAuth, isAdmin, expressAsyncHandler(async(req, res) => {
+    // populate: to get specific properties:
+    // from collection of user, the name property
+    // but this collection is from another model
+    // it's like a join in sql
+    const orders = await Order.find({}).populate('user', 'name');
+    res.send(orders);
+}));
 orderRouter.get('/mine', isAuth, expressAsyncHandler(async(req, res) => {
     const orders = await Order.find({user: req.user._id});
     res.send(orders);
