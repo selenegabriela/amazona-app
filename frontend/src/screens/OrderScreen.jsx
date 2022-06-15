@@ -3,10 +3,10 @@ import {PayPalButton} from 'react-paypal-button-v2';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { detailsOrder, payOrder } from '../actions/orderActions';
+import { deliverOrder, detailsOrder, payOrder } from '../actions/orderActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
 
 
 
@@ -15,11 +15,16 @@ const OrderScreen = () => {
     const [ sdkReady, setSdkReady ] = useState(false);
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
-    const orderPay = useSelector(state => state.orderDetails);
+    const orderPay = useSelector(state => state.orderPay);
     const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
-    console.log(orderDetails)
-    const dispatch = useDispatch();
 
+    const orderDeliver = useSelector(state => state.orderDeliver);
+    const { loading: loadingDeliver, error: errorDeliver, success: successDeliver } = orderDeliver;
+    
+    const userSignin = useSelector(state => state.userSignin);
+    const { userInfo } = userSignin;
+    const dispatch = useDispatch();
+    
     
     useEffect(() => {
         //PAYPAL FUNCTION
@@ -34,8 +39,9 @@ const OrderScreen = () => {
             }
             document.body.appendChild(script);
         }
-        if(!order || successPay || (order && order._id !== id)){
+        if(!order || successPay || successDeliver || (order && order._id !== id)){
             dispatch({type: ORDER_PAY_RESET});
+            dispatch({type: ORDER_DELIVER_RESET});
             dispatch(detailsOrder(id)); 
         } else {
             if(!order.isPaid){
@@ -48,9 +54,12 @@ const OrderScreen = () => {
             }
         }
         //After this, we need to install a paypal package: react-paypal-button-v2
-    }, [ dispatch, id, order, successPay ])
+    }, [ dispatch, id, order, successPay, successDeliver ])
     const successPaymentHandler = (paymentResult) => {
         dispatch(payOrder(order, paymentResult));
+    }
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order._id));
     }
 
     return loading ? (<LoadingBox></LoadingBox>) : error ? (<MessageBox variant='danger'>{error}</MessageBox>) : (
@@ -156,6 +165,15 @@ const OrderScreen = () => {
                                             <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler}></PayPalButton>
                                             </>
                                             )}
+                                        </li>
+                                    )
+                                }
+                                {
+                                    userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                        <li>
+                                            {loadingDeliver && <LoadingBox></LoadingBox>}
+                                            {errorDeliver && <MessageBox variant='danger'>{errorDeliver}</MessageBox>}
+                                            <button className='primary block' type='button' onClick={deliverHandler}>Deliver Order</button>
                                         </li>
                                     )
                                 }
