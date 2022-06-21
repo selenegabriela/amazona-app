@@ -1,7 +1,7 @@
 // Install multer to ypload images
 import multer from 'multer';
 import express from 'express';
-import { isAuth } from '../utils.js';
+import { isAdmin, isAuth } from '../utils.js';
 import expressAsyncHandler from "express-async-handler";
 
 
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 // Now we have to implement the middleware:
 const upload = multer({storage});
 
-uploadRouter.post('/', isAuth, upload.single('image'), (req, res) => {
+uploadRouter.post('/', isAuth, isAdmin, upload.single('image'), (req, res) => {
     // We send the path
     console.log(req)
     res.send(`/${req.file.path}`)
