@@ -18,6 +18,7 @@ import AdminRoute from './components/AdminRoute.jsx';
 import ProductListScreen from './screens/ProductListScreen.jsx';
 import ProductEditScreen from './screens/ProductEditScree.jsx';
 import OrderListScreen from './screens/OrderListScreen.jsx';
+import UserListScreen from './screens/UserListScreen.jsx';
 
 function App() {
   const cartItems = useSelector(state => state.cart.cartItems);
@@ -53,7 +54,7 @@ function App() {
                                 <Link to='/orderhistory'>Order History</Link>
                               </li>
                               <li>
-                                <Link to='#signout' onClick={signoutHandler}>Sign Out</Link>
+                                <Link to='/' onClick={signoutHandler}>Sign Out</Link>
                               </li>
                             </ul>
                           </div>
@@ -101,6 +102,7 @@ function App() {
                   <Route path="/profile" element={<PrivateRoute><ProfileScreen /></PrivateRoute>} />
                   <Route path="/productlist" element={<AdminRoute><ProductListScreen /></AdminRoute>} />
                   <Route path="/orderlist" element={<AdminRoute><OrderListScreen /></AdminRoute>} />
+                  <Route path="/userlist" element={<AdminRoute><UserListScreen /></AdminRoute>} />
                   <Route exact path='/cart/:id' element={<CartScreen />} />
                   <Route exact path='/cart/' element={<CartScreen />} />
                 </Routes>

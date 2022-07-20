@@ -51,7 +51,7 @@ const OrderListScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {orders.map(order => {
+                        { orders.map(order => {
                             return <tr key={order._id}>
                             <td>{order._id}</td>
                             <td>{order.user.name}</td>

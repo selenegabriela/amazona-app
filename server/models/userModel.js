@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema(
             default: false,
             required: true,
         },
+    //     isSeller: {
+    //         type: Boolean,
+    //         default: false,
+    //         required: true,
+    //     },
     },
     {
         timestamps: true,

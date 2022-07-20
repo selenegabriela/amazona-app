@@ -1,6 +1,6 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import { isAuth } from '../utils.js';
+import { isAdmin, isAuth } from '../utils.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils.js';
 import data from '../data.js';
@@ -12,7 +12,7 @@ const userRouter = express.Router();
 userRouter.get('/seed', expressAsyncHandler(async (req, res) => {
     // To remove all the created users and not having troubles with duplicated email:
 
-    //await User.deleteMany();
+    // await User.deleteMany();
 
     const createdUsers = await User.insertMany(data.users);
     res.send({ createdUsers });
@@ -88,6 +88,11 @@ userRouter.put('/profile', isAuth, expressAsyncHandler(async(req, res) => {
             token: generateToken(updatedUser),
         });
     }
-}))
+}));
+
+userRouter.get('/', isAuth, isAdmin, expressAsyncHandler(async(req, res) => {
+    const users = await User.find({});
+    res.send(users);
+}));
 
 export default userRouter;
