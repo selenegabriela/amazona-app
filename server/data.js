@@ -13,7 +13,49 @@ const data = {
             email: 'pank@example.com',
             password: bcrypt.hashSync('12345', 8),
             isAdmin: false,
-        }
+        },
+        {
+            name: 'Pan',
+            email: 'pan@example.com',
+            password: bcrypt.hashSync('12345', 8),
+            isAdmin: false,
+        },
+        {
+            name: 'Pan',
+            email: 'pa@example.com',
+            password: bcrypt.hashSync('12345', 8),
+            isAdmin: false,
+        },
+        {
+            name: 'Pan',
+            email: 'p@example.com',
+            password: bcrypt.hashSync('12345', 8),
+            isAdmin: false,
+        },
+        {
+            name: 'Pan',
+            email: 'pank@exampl.com',
+            password: bcrypt.hashSync('12345', 8),
+            isAdmin: false,
+        },
+        {
+            name: 'Pan',
+            email: 'pank@examp.com',
+            password: bcrypt.hashSync('12345', 8),
+            isAdmin: false,
+        },
+        {
+            name: 'Pan',
+            email: 'pank@exam.com',
+            password: bcrypt.hashSync('12345', 8),
+            isAdmin: false,
+        },
+        {
+            name: 'Pan',
+            email: 'pank@exa.com',
+            password: bcrypt.hashSync('12345', 8),
+            isAdmin: false,
+        },
     ],
     products: [
         {
