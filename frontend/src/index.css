@@ -76,6 +76,7 @@ button{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 button{
   background-color: #f8f8f8;
   cursor: pointer;
