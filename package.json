@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd server && npm install && cd ../frontend && npm install && node --unhandled-rejections=strict build.js",
+    "build": "cd server && npm install && cd ../frontend && npm install && npm run --unhandled-rejections=strict build.js",
     "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
