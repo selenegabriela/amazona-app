@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
 // To connect mongodb with express
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona' //  ←←← When you install MongoDB Community Edition the addres is going to be this and after the lasta slash we put the database name.
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/amazona' //  ←←← When you install MongoDB Community Edition the addres is going to be this and after the lasta slash we put the database name.
 // {
 //     useNewUrlParser: true,
 //     useUnifiedTopology: true,
